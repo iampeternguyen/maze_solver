@@ -24,21 +24,9 @@ class Solver
   def auto_mode
     target_found = false
 
-    # @open_nodes << Node.new(nil, [6,2], @maze.finish)
-    # @open_nodes << Node.new(nil, [5,2], @maze.finish)
-
-    # @open_nodes << Node.new(nil, [3,1], @maze.finish)
-
-
-
     while !target_found
       sort_open_nodes
-
       current_node = @open_nodes[0]
-      @movement[current_node.row][current_node.col] = "X"
-      print_movement
-      # puts current_node
-      sleep(0.2)
       @closed_nodes << @open_nodes.shift
       if current_node.is_finish?
         target_found = true
@@ -48,15 +36,18 @@ class Solver
     end
     @movement = @maze.array.clone
     draw_path(current_node)
-    print_movement
   end
 
   def draw_path(current_node)
     @movement[current_node.row][current_node.col] = "X"
+    print_movement
+    sleep(0.5)
     if current_node.parent
       draw_path(current_node.parent)
     end
   end
+
+
   def find_and_add_nearest_nodes(current_node)
 
     row, col = current_node.row + 1, current_node.col
@@ -131,70 +122,6 @@ class Solver
   end
 
 end
-
-# class Path
-#   attr_reader :parent, :row, :col, :open_nodes, :closed_nodes
-#   def initialize(parent, row, col)
-#     @parent = parent
-#     @row, @col = row,col
-#     @open_nodes = []
-#     @closed_nodes = []
-#     @child = nil
-#   end
-
-#   def search(maze_array)
-#     if @parent
-#       @open_nodes = @parent.open_nodes.clone
-#       @closed_nodes = @parent.closed_nodes.clone
-#     end
-
-#     row, col = @row + 1, @col
-#     node = maze_array[row][col]
-#     if node
-#       @open_nodes << [row,col] if node != "*" && !@open_nodes.include?([row,col])
-#       @closed_nodes << [row,col] if node == "*" && !@closed_nodes.include?([row,col])
-#     end
-
-
-#     row, col = @row - 1, @col
-#     node = maze_array[row][col]
-#     if node
-#       @open_nodes << [row,col] if node != "*" && !@open_nodes.include?([row,col])
-#       @closed_nodes << [row,col] if node == "*" && !@closed_nodes.include?([row,col])
-#     end
-
-
-#     row, col = @row, @col + 1
-#     node = maze_array[row][col]
-#     if node
-#       @open_nodes << [row,col] if node != "*" && !@open_nodes.include?([row,col])
-#       @closed_nodes << [row,col] if node == "*" && !@closed_nodes.include?([row,col])
-#     end
-
-
-#     row, col = @row, @col - 1
-#     node = maze_array[row][col]
-#     if node
-#       @open_nodes << [row,col] if node != "*" && !@open_nodes.include?([row,col])
-#       @closed_nodes << [row,col] if node == "*" && !@closed_nodes.include?([row,col])
-#     end
-
-
-#   end
-
-#   def best_node
-#     @open_nodes.each do |position|
-#       row, col = position
-
-#     end
-
-#   end
-
-
-# end
-
-
-
 
 if __FILE__ == $PROGRAM_NAME
   maze = Maze.new(__dir__ + '/maze.txt')

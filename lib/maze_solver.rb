@@ -19,8 +19,9 @@ class Solver
 
   def auto_mode
     start = Path.new(nil, @row, @col)
-    start.find_open(@maze.array)
+    start.search(@maze.array)
     p start.open_nodes
+    p start.closed_nodes
   end
 
   def print_movement
@@ -56,7 +57,7 @@ class Solver
 end
 
 class Path
-  attr_reader :parent, :row, :col, :open_nodes, :closed
+  attr_reader :parent, :row, :col, :open_nodes, :closed_nodes
   def initialize(parent, row, col)
     @parent = parent
     @row, @col = row,col
@@ -65,30 +66,51 @@ class Path
     @child = nil
   end
 
-  def find_open(maze_array)
+  def search(maze_array)
     if @parent
       @open_nodes = @parent.open_nodes.clone
+      @closed_nodes = @parent.closed_nodes.clone
     end
 
     row, col = @row + 1, @col
     node = maze_array[row][col]
-    @open_nodes << [row,col] if node != "*" && !@open_nodes.include?([row,col])
-    @closed_nodes << [row,col] if node == "*" && !@closed_nodes.include?([row,col])
+    if node
+      @open_nodes << [row,col] if node != "*" && !@open_nodes.include?([row,col])
+      @closed_nodes << [row,col] if node == "*" && !@closed_nodes.include?([row,col])
+    end
+
 
     row, col = @row - 1, @col
     node = maze_array[row][col]
-    @open_nodes << [row,col] if node != "*" && !@open_nodes.include?([row,col])
-    @closed_nodes << [row,col] if node == "*" && !@closed_nodes.include?([row,col])
+    if node
+      @open_nodes << [row,col] if node != "*" && !@open_nodes.include?([row,col])
+      @closed_nodes << [row,col] if node == "*" && !@closed_nodes.include?([row,col])
+    end
+
 
     row, col = @row, @col + 1
     node = maze_array[row][col]
-    @open_nodes << [row,col] if node != "*" && !@open_nodes.include?([row,col])
-    @closed_nodes << [row,col] if node == "*" && !@closed_nodes.include?([row,col])
+    if node
+      @open_nodes << [row,col] if node != "*" && !@open_nodes.include?([row,col])
+      @closed_nodes << [row,col] if node == "*" && !@closed_nodes.include?([row,col])
+    end
+
 
     row, col = @row, @col - 1
     node = maze_array[row][col]
-    @open_nodes << node if node != "*" && !@open_nodes.include?([row,col])
-    @closed_nodes << node if node == "*" && !@closed_nodes.include?([row,col])
+    if node
+      @open_nodes << [row,col] if node != "*" && !@open_nodes.include?([row,col])
+      @closed_nodes << [row,col] if node == "*" && !@closed_nodes.include?([row,col])
+    end
+
+
+  end
+
+  def best_node
+    @open_nodes.each do |position|
+      row, col = position
+
+    end
 
   end
 

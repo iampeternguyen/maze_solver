@@ -12,7 +12,9 @@ class Node
 
   def calculateH
     row, col = @finish
-    (row-@row).abs + (col-@col).abs
+    p row
+    p col
+    (row - self.row).abs + (col-self.col).abs
   end
 
   def ==(other_node)

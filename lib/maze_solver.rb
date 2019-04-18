@@ -31,17 +31,43 @@ class Solver
 
 
     sort_open_nodes
-
-    while !target_found
+    i = 0
+    while i < 3
       current_node = sort_open_nodes[0]
 
       find_and_add_nearest_nodes(current_node)
-
+      i += 1
     end
+    p @open_nodes
 
   end
 
   def find_and_add_nearest_nodes(current_node)
+
+    row, col = current_node.row + 1, current_node.col
+    add_node(row, col, current_node)
+
+    row, col = current_node.row - 1, current_node.col
+    add_node(row, col, current_node)
+
+    row, col = current_node.row , current_node.col + 1
+    add_node(row, col, current_node)
+
+    row, col = current_node.row , current_node.col - 1
+    add_node(row, col, current_node)
+  end
+
+  def add_node(row,col,current_node)
+    node = @maze.array[row][col]
+    if node
+      new_node = Node.new(current_node, [row,col], @maze.finish)
+
+      if @open_nodes.none? {|open_node| open_node == new_node} && node != "*"
+        @open_nodes << new_node
+      elsif @closed_nodes.none? {|closed_node| closed_node == new_node} && node == "*"
+        @closed_nodes << new_node
+      end
+    end
   end
 
   def sort_open_nodes

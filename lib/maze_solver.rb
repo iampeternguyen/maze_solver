@@ -11,16 +11,6 @@ class Solver
     @movement = maze.array.clone
   end
 
-  def manual_mode
-    print_movement
-
-
-    while true
-      input = gets.chomp
-      move(input)
-    end
-  end
-
   def auto_mode
     target_found = false
 
@@ -94,33 +84,6 @@ class Solver
   def print_movement
     @movement.each {|row| p row}
   end
-
-  def move(direction)
-    row, col = @row,@col
-    if direction == "u"
-      row -= 1
-    end
-    if direction == "d"
-      row += 1
-    end
-    if direction == "l"
-      col -= 1
-    end
-    if direction == "r"
-      col += 1
-    end
-
-    if @movement[row][col] != "*"
-      @row,@col = row,col
-      @movement[@row][@col] = "X"
-    else
-      puts "invalid direction"
-    end
-
-    print_movement
-    sleep(2)
-  end
-
 end
 
 if __FILE__ == $PROGRAM_NAME

@@ -5,7 +5,9 @@ class Solver
   def initialize(maze)
     @maze = maze
     @start = Node.new(nil, @maze.start, @maze.finish)
-    p @start
+    @open_nodes = []
+    @closed_nodes = []
+    @open_nodes << @start
     @movement = maze.array.clone
   end
 
@@ -20,12 +22,30 @@ class Solver
   end
 
   def auto_mode
+    target_found = false
 
-    # start = Path.new(nil, @row, @col)
-    # start.search(@maze.array)
-    # p start.open_nodes
-    # p start.closed_nodes
+    # @open_nodes << Node.new(nil, [6,2], @maze.finish)
+    # @open_nodes << Node.new(nil, [5,2], @maze.finish)
 
+    # @open_nodes << Node.new(nil, [3,1], @maze.finish)
+
+
+    sort_open_nodes
+
+    while !target_found
+      current_node = sort_open_nodes[0]
+
+      find_and_add_nearest_nodes(current_node)
+
+    end
+
+  end
+
+  def find_and_add_nearest_nodes(current_node)
+  end
+
+  def sort_open_nodes
+    @open_nodes.sort! {|x,y| x.f <=> y.f}
   end
 
   def print_movement
@@ -127,5 +147,5 @@ end
 if __FILE__ == $PROGRAM_NAME
   maze = Maze.new(__dir__ + '/maze.txt')
   solver = Solver.new(maze)
-  # solver.auto_mode
+  solver.auto_mode
 end

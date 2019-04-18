@@ -1,5 +1,5 @@
 class Node
-  attr_reader :g
+  attr_reader :g, :row, :col, :f, :h
 
   def initialize(parent, position, finish)
     @row, @col = position
@@ -13,6 +13,10 @@ class Node
   def calculateH
     row, col = @finish
     (row-@row).abs + (col-@col).abs
+  end
+
+  def ==(other_node)
+    self.row == other_node.row && self.col == other_node.col
   end
 
   def calculateG

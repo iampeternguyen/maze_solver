@@ -1,5 +1,5 @@
 class Node
-  attr_reader :g, :row, :col, :f, :h
+  attr_reader :g, :row, :col, :f, :h, :parent
 
   def initialize(parent, position, finish)
     @row, @col = position
@@ -12,8 +12,6 @@ class Node
 
   def calculateH
     row, col = @finish
-    p row
-    p col
     (row - self.row).abs + (col-self.col).abs
   end
 
@@ -30,7 +28,11 @@ class Node
   end
 
   def is_finish?
-    row, col = finish
-    @row == row && @col==col
+    row, col = @finish
+    self.row == row && self.col==col
+  end
+
+  def to_s
+    "[#{@row.to_s}, #{@col.to_s}]"
   end
 end

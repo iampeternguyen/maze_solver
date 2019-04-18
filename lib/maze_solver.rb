@@ -30,18 +30,33 @@ class Solver
     # @open_nodes << Node.new(nil, [3,1], @maze.finish)
 
 
-    sort_open_nodes
-    i = 0
-    while i < 3
-      current_node = sort_open_nodes[0]
 
+    while !target_found
+      sort_open_nodes
+
+      current_node = @open_nodes[0]
+      @movement[current_node.row][current_node.col] = "X"
+      print_movement
+      # puts current_node
+      sleep(0.2)
+      @closed_nodes << @open_nodes.shift
+      if current_node.is_finish?
+        target_found = true
+        break
+      end
       find_and_add_nearest_nodes(current_node)
-      i += 1
     end
-    p @open_nodes
-
+    @movement = @maze.array.clone
+    draw_path(current_node)
+    print_movement
   end
 
+  def draw_path(current_node)
+    @movement[current_node.row][current_node.col] = "X"
+    if current_node.parent
+      draw_path(current_node.parent)
+    end
+  end
   def find_and_add_nearest_nodes(current_node)
 
     row, col = current_node.row + 1, current_node.col
@@ -61,6 +76,17 @@ class Solver
     node = @maze.array[row][col]
     if node
       new_node = Node.new(current_node, [row,col], @maze.finish)
+
+      @closed_nodes.each do |closed_node|
+        return nil if new_node == closed_node
+      end
+
+      @open_nodes.each_with_index do |open_node, index|
+        if new_node == open_node
+          @open_nodes[index] = new_node
+          return new_node
+        end
+      end
 
       if @open_nodes.none? {|open_node| open_node == new_node} && node != "*"
         @open_nodes << new_node
